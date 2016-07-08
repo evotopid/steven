@@ -11,9 +11,12 @@ fn main() {
     let dest = Path::new(&out_dir);
 
     let mut file = BufWriter::new(File::create(&dest.join("bindings.rs")).unwrap());
-    gl_generator::generate_bindings(gl_generator::GlobalGenerator,
-                                    gl_generator::registry::Ns::Gl,
-                                    gl_generator::Fallbacks::All,
-                                    khronos_api::GL_XML, vec![], "3.2", "core",
-                                    &mut file).unwrap();
+
+    gl_generator::Registry::new(gl_generator::Api::Gl,
+                                (3, 2),
+                                gl_generator::Profile::Core,
+                                gl_generator::Fallbacks::All,
+                                vec![])
+        .write_bindings(gl_generator::GlobalGenerator, &mut file)
+        .unwrap();
 }
